@@ -17,7 +17,7 @@ VERSION "2018-06-13"
 
     /** Vollständie Adresse inkl. Telefonnummer, E-Mail und Internetadresse eines Grundbuchamtes
      */
-    STRUCTURE Grundbuchamt =
+    CLASS Grundbuchamt =
       /** Name der Amtschreiberei
        */
       Amtschreiberei : MANDATORY TEXT*255;
@@ -45,6 +45,9 @@ VERSION "2018-06-13"
       /** Unternehmens-Identifikationsnummer
        */
       UID : TEXT*15;
+      /** Hausnummer
+       */
+      Hausnummer : TEXT*20;
     END Grundbuchamt;
 
     /** Grundbuchkreisaufteilung
@@ -53,14 +56,13 @@ VERSION "2018-06-13"
       /** Name des Grundbuches
        */
       Name : MANDATORY TEXT*255;
-      /** Gemeindenummer der politischen Gemeinde
-       */
-      BFSNr : MANDATORY CHAdminCodes_V1.CHCantonCode;
       /** Art des Grundbuches
        */
       Art : MANDATORY (
         eidgenoessisch,
-        kantonal
+        kantonal,
+        gemischt,
+        unbekannt
       );
       /** Nummerierungsbereich-Identifikator aus der amtlichen Vermessung
        */
@@ -71,11 +73,81 @@ VERSION "2018-06-13"
       /** Ehemalige Gemeindenummer des Grundbuches (z.B. vor Gemeindefusion).
        */
       Grundbuchkreis_BFSNr : MANDATORY CHAdminCodes_V1.CHMunicipalityCode;
-      /** Anschrift des Grundbuchamtes
+      /** Perimeter des Grundbuchkreises
        */
-      Amt : MANDATORY SO_AGI_AV_GB_Administrative_Einteilungen_20180613.Grundbuchkreise.Grundbuchamt;
+      Perimeter : MANDATORY GeometryCHLV95_V1.MultiSurface;
     END Grundbuchkreis;
 
+    ASSOCIATION Kreis_Amt =
+      r_Grundbuchkreis -- {1..*} Grundbuchkreis;
+      r_Grundbuchamt -- {1} Grundbuchamt;
+    END Kreis_Amt;
+
   END Grundbuchkreise;
+
+  TOPIC Nachfuehrungskreise =
+
+    /** Politische Gemeinde
+     */
+    CLASS Gemeinde =
+      BFSNr : MANDATORY CHAdminCodes_V1.CHMunicipalityCode;
+    END Gemeinde;
+
+    /** Informationen zum Nachfuehrungsgeometer
+     */
+    CLASS Nachfuehrungsgeometer =
+      /** Familienname
+       */
+      Name : MANDATORY TEXT*255;
+      /** Vorname
+       */
+      Vorname : MANDATORY TEXT*255;
+      /** (Akademischer) Titel, z.B. Dr.
+       */
+      Titel : TEXT*255;
+    END Nachfuehrungsgeometer;
+
+    /** Informationen zum Bürostandort
+     */
+    CLASS Standort =
+      /** Name der Firma
+       */
+      Firma : MANDATORY TEXT*255;
+      /** Eventuell Zusatzname der Firma
+       */
+      Firma_Zusatz : TEXT*255;
+      Strasse : MANDATORY TEXT*255;
+      /** Hausnummer
+       */
+      Hausnummer : TEXT*100;
+      /** Postleitzahl
+       */
+      PLZ : MANDATORY 1000 .. 9999;
+      Ortschaft : MANDATORY TEXT*255;
+      /** Telefonnummer
+       */
+      Telefon : MANDATORY TEXT*255;
+      /** Homepage
+       */
+      Web : MANDATORY INTERLIS.URI;
+      /** E-Mail-Adresse
+       */
+      Email : MANDATORY TEXT*255;
+      /** Unternehmens-Identifikationsnummer
+       */
+      UID : TEXT*15;
+    END Standort;
+
+    ASSOCIATION Gemeinde_Geometer =
+      r_Gemeinde_Geometer -- {1..*} Gemeinde;
+      r_Geometer -- {1} Nachfuehrungsgeometer;
+    END Gemeinde_Geometer;
+
+    ASSOCIATION Gemeinde_Standort =
+      r_Gemeinde_Standort -- {1..*} Gemeinde;
+      r_Standort -- {1} Standort;
+    END Gemeinde_Standort;
+
+  END Nachfuehrungskreise;
 
 END SO_AGI_AV_GB_Administrative_Einteilungen_20180613.
