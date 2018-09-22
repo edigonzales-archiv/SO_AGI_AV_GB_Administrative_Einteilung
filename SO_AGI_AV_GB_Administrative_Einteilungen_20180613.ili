@@ -1,15 +1,14 @@
 INTERLIS 2.3;
 
+/** !!------------------------------------------------------------------------------
+ * !! Version    | wer | Änderung
+ * !!------------------------------------------------------------------------------
+ * !! 2015-06-30 | SZ  | Initialversion
+ */
 !!@ technicalContact=mailto:agi@bd.so.ch
 MODEL SO_AGI_AV_GB_Administrative_Einteilungen_20180613 (de)
 AT "http://www.geo.so.ch/models/AGI"
-VERSION "2018-06-13" 
-  // /**
-     * !!------------------------------------------------------------------------------
-     * !! Version    | wer | Änderung
-     * !!------------------------------------------------------------------------------
-     * !! 2015-06-30 | SZ  | Initialversion
-   // =
+VERSION "2018-06-13"  =
   IMPORTS GeometryCHLV95_V1,CHAdminCodes_V1;
 
   TOPIC Grundbuchkreise =
@@ -75,7 +74,7 @@ VERSION "2018-06-13"
       Grundbuchkreis_BFSNr : MANDATORY CHAdminCodes_V1.CHMunicipalityCode;
       /** Perimeter des Grundbuchkreises
        */
-      Perimeter : MANDATORY GeometryCHLV95_V1.MultiSurface;
+      BFSNr : MANDATORY CHAdminCodes_V1.CHMunicipalityCode;
     END Grundbuchkreis;
 
     ASSOCIATION Kreis_Amt =
@@ -86,6 +85,7 @@ VERSION "2018-06-13"
   END Grundbuchkreise;
 
   TOPIC Nachfuehrungskreise =
+    OID AS INTERLIS.UUIDOID;
 
     /** Politische Gemeinde
      */
@@ -123,6 +123,8 @@ VERSION "2018-06-13"
       /** Postleitzahl
        */
       PLZ : MANDATORY 1000 .. 9999;
+      /** Postalische Ortschaft
+       */
       Ortschaft : MANDATORY TEXT*255;
       /** Telefonnummer
        */
