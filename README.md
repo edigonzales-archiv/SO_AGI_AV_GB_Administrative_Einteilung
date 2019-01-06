@@ -33,6 +33,11 @@ java -jar /Users/stefan/apps/ili2pg-3.11.3/ili2pg.jar --defaultSrsCode 2056  --m
 xmllint --format agi_av_gb_administrative_einteilungen.xtf -o agi_av_gb_administrative_einteilungen.xtf
 ```
 
+Lokal Pub-Modell:
+```
+java -jar /Users/stefan/apps/ili2pg-3.11.3/ili2pg.jar --defaultSrsCode 2056 --sqlEnableNull --strokeArcs --createGeomIdx --createEnumTabs --beautifyEnumDispName --createMetaInfo --createUnique --createNumChecks --nameByTopic --modeldir "http://models.geo.admin.ch;." --models SO_AGI_AV_GB_Administrative_Einteilungen_Publikation_20180822 --dbhost 192.168.50.8 --dbdatabase pub --dbusr ddluser --dbpwd ddluser --dbschema agi_av_gb_administrative_einteilungen_pub --import agi_av_gb_administrative_einteilungen_pub.xtf
+```
+
 
 
 ### kettle
